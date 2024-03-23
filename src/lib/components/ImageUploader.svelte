@@ -33,7 +33,22 @@
 		canvas.height = height;
 		ctx.drawImage(img, 0, 0, width, height);
 
-		let dataUrl = canvas.toDataURL('image/jpeg');
+		// Adjust JPEG quality to meet file size limit
+		let quality = 1.0; // Initial JPEG quality
+
+		let dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+		/**
+		 * Yikes!
+		 *
+		 * Since we are sending this data to the backend we have a
+		 *   tight restriction of 524288 bytes .... doioioing
+		 */
+		const maxFileSizeBytes = 524288;
+		while (dataUrl.length > maxFileSizeBytes) {
+			quality -= 0.1; // Decrease quality by 10% each iteration
+			dataUrl = canvas.toDataURL('image/jpeg', quality);
+		}
 
 		return dataUrl;
 	};
@@ -75,6 +90,3 @@
 
 <!-- TODO: eventually add ", video/*" to the accept prop below to allow capturing video -->
 <input type="file" id="capture" accept="image/*" on:change={captureMedia} hidden />
-
-<!-- The following hidden input stores the capture's data -->
-<input type="text" name="imageData" value={imageData} hidden />
