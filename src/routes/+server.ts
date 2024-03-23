@@ -1,5 +1,5 @@
 import { REPLICATE_API_KEY } from "$env/static/private";
-import { fail, json } from "@sveltejs/kit";
+import { json } from '@sveltejs/kit';
 import Replicate from "replicate";
 
 export const POST = async ({ request }) => {
