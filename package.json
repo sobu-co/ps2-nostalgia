@@ -2,10 +2,6 @@
 	"name": "ps2-nostalgia",
 	"version": "0.0.1",
 	"private": true,
-	"engines": {
-		"node": "^18.18.2",
-		"npm": ">=8.19.2"
-	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -18,7 +14,6 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-cloudflare": "^4.2.0",
-		"@sveltejs/adapter-cloudflare-workers": "^2.2.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "^8.56.0",
