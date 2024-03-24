@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1 {
+    font-family: 'PlayStation'
+}
+
+@font-face {
+    font-family: 'PlayStation';
+    font-style: normal;
+    font-weight: 500;
+    src: url('/fonts/PlayStation.eot');
+    /* IE9 Compat Modes */
+    src: local(''),
+        url('/fonts/PlayStation.eot?#iefix') format('embedded-opentype'),
+        /* IE6-IE8 */
+        url('/fonts/PlayStation.woff2') format('woff2'),
+        /* Super Modern Browsers */
+        url('/fonts/PlayStation.woff') format('woff'),
+        /* Modern Browsers */
+        url('/fonts/PlayStation.ttf') format('truetype'),
+        /* Safari, Android, iOS */
+        url('/fonts/PlayStation.svg') format('svg');
+}
