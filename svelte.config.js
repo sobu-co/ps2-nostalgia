@@ -1,6 +1,5 @@
 import cfpAdapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import cfwAdapter from '@sveltejs/adapter-cloudflare-workers';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
