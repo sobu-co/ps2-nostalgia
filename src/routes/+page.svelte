@@ -18,7 +18,7 @@
 	}
 </script>
 
-<h1 class="flex justify-center items-center text-6xl gap-2 mb-5">PS2 Nostalgia</h1>
+<h1 class="flex justify-center items-center text-6xl gap-2 mt-10 mb-5">PS2 Nostalgia</h1>
 
 {#if !imageData}
 	<ImageUploader {imageData} on:change={imageDataChanged} />
