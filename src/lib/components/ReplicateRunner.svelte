@@ -27,7 +27,7 @@
 			});
 		}
 
-		const response = await fetch(`/`, {
+		const response = await fetch(`/api/generate`, {
 			method: 'POST',
 			body: JSON.stringify({ imageData: imageData })
 		});
