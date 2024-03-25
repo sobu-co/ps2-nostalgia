@@ -16,7 +16,7 @@ export const POST = async ({ request }) => {
                 image: imageData,
                 style: 'Video game',
                 prompt: 'ps2 gamecube, pixelated, sims gta style',
-                denoising_strength: 0.4
+                denoising_strength: 0.45
             }
         }
     );

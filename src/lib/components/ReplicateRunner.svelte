@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
 	import Button from './Button.svelte';
-	import { pixelateImageData } from '$lib/utils/imageUtils';
+	import { pixelateImageData, saveImage } from '$lib/utils/imageUtils';
 
 	export let imageData: string;
 	export let pixelatedPreview: string | null;
 
 	const dispatch = createEventDispatcher();
 
+	let loadingError: string | null = null;
 	let loadingText: string | null = null;
 	let generatedImageUri: string | null = null;
 
@@ -38,30 +39,29 @@
 	}
 </script>
 
-<div class="flex flex-col items-center gap-2">
-	{#if generatedImageUri}
-		<img src={generatedImageUri} alt="generated" class="max-h-[600px] w-fit" />
-	{:else if pixelatedPreview}
-		<div class="relative">
-			<img src={pixelatedPreview} alt="generated preview" class="max-h-[600px] w-fit" />
+{#if generatedImageUri}
+	<div class="flex gap-5 justify-center">
+		<Button label={'SAVE'} on:click={() => generatedImageUri && saveImage(generatedImageUri)} />
+		<Button label={'RESTART'} type="o" on:click={() => dispatch('restart')} />
+	</div>
+	<img src={generatedImageUri} alt="generated" class="max-h-[600px] w-fit" />
+{:else}
+	<div class="flex gap-5 justify-center">
+		<Button label={'CONVERT'} on:click={runModel} />
+		<Button label={'RESTART'} type="o" on:click={() => dispatch('restart')} />
+	</div>
+	<div class="relative">
+		<img src={pixelatedPreview} alt="generated preview" class="max-h-[600px] w-fit" />
+
+		{#if loadingText}
 			<div class="absolute inset-0 flex items-center justify-center">
 				<div
-					class="bg-white text-center rounded-lg border border-5 border-black px-4 py-2 flex items-center justify-center text-lg font-bold"
+					class="animate-pulse bg-white text-center rounded-lg border border-5 border-black px-4 py-2 flex items-center justify-center text-lg font-bold"
 				>
-					<Button label={'PS2 TIME'} type="o" on:click={runModel} />
+					{loadingText}
 				</div>
 			</div>
-		</div>
-	{/if}
-</div>
-
-{#if loadingText}
-	<div class="fixed inset-0 flex items-center justify-center z-50">
-		<div
-			class="animate-pulse bg-white text-center rounded-lg border border-5 border-black px-4 py-2 flex items-center justify-center text-lg font-bold"
-		>
-			{loadingText}
-		</div>
+		{/if}
 	</div>
 {/if}
 
