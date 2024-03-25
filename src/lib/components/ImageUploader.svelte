@@ -1,11 +1,22 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import Button from './Button.svelte';
 	import { resizeAndConvertToJPEG } from '$lib/utils/imageUtils';
 
-	export let imageData: string | null = null;
-
 	const dispatch = createEventDispatcher();
+
+	onMount(() => {
+		window.addEventListener('keydown', handleKeyDown);
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	});
+
+	const handleKeyDown = (event: KeyboardEvent) => {
+		if (event.key === 'x') {
+			openFileInput();
+		}
+	};
 
 	const openFileInput = () => {
 		const fileInput = document.getElementById('capture') as HTMLInputElement;
@@ -23,7 +34,7 @@
 				reader.onload = function (e) {
 					const img = new Image();
 					img.onload = () => {
-						dispatch('change', { imageData: resizeAndConvertToJPEG(img) });
+						dispatch('upload', { imageData: resizeAndConvertToJPEG(img) });
 					};
 					img.src = e.target?.result as string;
 				};
@@ -34,13 +45,7 @@
 	};
 </script>
 
-<div class="flex flex-col items-center gap-2">
-	<Button label={'CHOOSE AN IMAGE'} on:click={openFileInput} />
-
-	{#if imageData}
-		<img src={imageData} alt="user upload" class="max-h-[600px] w-fit" />
-	{/if}
-</div>
+<Button label={'CHOOSE AN IMAGE'} on:click={openFileInput} />
 
 <!-- TODO: eventually add ", video/*" to the accept prop below to allow capturing video -->
 <input type="file" id="capture" accept="image/*" on:change={captureMedia} hidden />

@@ -19,12 +19,7 @@ export const POST = async ({ request }) => {
                 denoising_strength: 0.45
             }
         }
-    );
-
-    // frank image:
-    // https://replicate.delivery/pbxt/awI7fIMWF8VMbayrs6bzxWjIakMcjibHAAdbYasQo9s7KoRJA/ComfyUI_00001_.png
-    // hector bellerin:
-    // https://replicate.delivery/pbxt/lOeZwdXrvszvfUjqCzFXEAq0Jh2DqFO42KIWhrczSgoMrQjSA/ComfyUI_00001_.png
+    ) as string[];
 
     if (output && output[0]) {
         const generatedImgUri = output[0];
@@ -32,5 +27,5 @@ export const POST = async ({ request }) => {
         return json({ generatedImgUri });
     }
 
-    return json({ error: "woopsie daisie!!" });
+    return json({ error: "woopsie daisie!! try a different image" });
 }

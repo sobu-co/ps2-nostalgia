@@ -3,7 +3,7 @@
 </script>
 
 <div class="flex justify-center min-h-screen pulsing-background">
-	<div class="flex w-screen max-w-[700px] flex-col gap-5 py-5 px-2">
+	<div class="flex w-screen max-w-[700px] flex-col gap-5 py-5 px-2 justify-center items-center">
 		<slot />
 	</div>
 </div>

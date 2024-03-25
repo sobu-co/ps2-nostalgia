@@ -107,7 +107,7 @@ export const saveImage = async (imageUri: string) => {
                         }
                     ]
                 });
-                await handle.createWritable().then(writer => writer.write(blob));
+                await handle.createWritable().then((writer: any) => writer.write(blob));
             } else {
                 // Fallback for browsers that do not support showSaveFilePicker
                 const url = URL.createObjectURL(blob);

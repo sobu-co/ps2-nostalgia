@@ -8,6 +8,10 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+	interface Window {
+		showSaveFilePicker: any
+		MSStream: any
+	}
 }
 
-export {};
+export { };
