@@ -41,27 +41,43 @@ export const resizeAndConvertToJPEG = (img: HTMLImageElement): string => {
     return dataUrl;
 };
 
-export const pixelateImageData = (img: HTMLImageElement): string => {
-    let { width, height } = img;
+export const pixelateRawImageData = (imageData: string, pixelSize: number): Promise<string> => {
+    const img = new Image();
+    img.src = imageData;
 
-    const pixelSize = 10;
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    return new Promise((resolve, reject) => {
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
 
-    if (!ctx) return 'woops!';
+            if (!ctx) {
+                reject('Canvas context is not supported.');
+                return;
+            }
 
-    canvas.width = width;
-    canvas.height = height;
-    ctx.drawImage(img, 0, 0, width, height);
+            const { width, height } = img;
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
 
-    const pixels = pixelSize * 2;
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(canvas, 0, 0, canvas.width / pixels, canvas.height / pixels);
-    ctx.drawImage(canvas, 0, 0, canvas.width / pixels, canvas.height / pixels, 0, 0, canvas.width, canvas.height);
+            const pixels = pixelSize * 2;
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(canvas, 0, 0, canvas.width / pixels, canvas.height / pixels);
+            ctx.drawImage(
+                canvas,
+                0, 0, canvas.width / pixels, canvas.height / pixels,
+                0, 0, canvas.width, canvas.height
+            );
 
-    const pixelatedImageData = canvas.toDataURL();
-    return pixelatedImageData;
-}
+            const pixelatedImageData = canvas.toDataURL();
+            resolve(pixelatedImageData);
+        };
+
+        img.onerror = () => {
+            reject('Error loading image.');
+        };
+    });
+};
 
 export const saveImage = async (imageUri: string) => {
     try {
