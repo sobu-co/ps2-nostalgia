@@ -68,7 +68,7 @@
 	<ImageUploader on:upload={imageUploaded} />
 	<img src={'example_crop.png'} alt="example" class="max-h-[600px]" />
 {:else if generatedImage}
-	<div class="h-[30px]">
+	<div class="h-[30px] flex gap-5">
 		<Button label={'SAVE'} type="x" on:click={save} />
 		<Button label={'RESTART'} type="o" on:click={restart} />
 	</div>
@@ -77,7 +77,7 @@
 	{:else}
 		<img src={uploadedImage} alt="original" class="max-h-[600px]" />
 	{/if}
-	<div class="h-[30px] flex gap-5">
+	<div class="h-[30px]">
 		<Button
 			label={focusGenerated ? 'VIEW ORIGINAL' : 'VIEW PS2'}
 			on:click={() => (focusGenerated = !focusGenerated)}
