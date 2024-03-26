@@ -5,19 +5,6 @@
 
 	const dispatch = createEventDispatcher();
 
-	onMount(() => {
-		window.addEventListener('keydown', handleKeyDown);
-		return () => {
-			window.removeEventListener('keydown', handleKeyDown);
-		};
-	});
-
-	const handleKeyDown = (event: KeyboardEvent) => {
-		if (event.key === 'x') {
-			openFileInput();
-		}
-	};
-
 	const openFileInput = () => {
 		const fileInput = document.getElementById('capture') as HTMLInputElement;
 		fileInput.click();
@@ -45,7 +32,7 @@
 	};
 </script>
 
-<Button label={'CHOOSE AN IMAGE'} on:click={openFileInput} />
+<Button label={'CHOOSE AN IMAGE'} type="x" on:click={openFileInput} />
 
 <!-- TODO: eventually add ", video/*" to the accept prop below to allow capturing video -->
 <input type="file" id="capture" accept="image/*" on:change={captureMedia} hidden />

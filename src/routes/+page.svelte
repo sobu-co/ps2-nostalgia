@@ -1,40 +1,28 @@
 <script lang="ts">
 	import ImageUploader from '$lib/components/ImageUploader.svelte';
-	import ReplicateRunner from '$lib/components/ReplicateRunner.svelte';
 	import PixelatedPreview from '$lib/components/PixelatedPreview.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Generating from '$lib/components/Generating.svelte';
 	import { saveImage } from '$lib/utils/imageUtils';
-	import { onMount } from 'svelte';
 
 	let uploadedImage: string | null = null;
+
 	let pixelatedImage: string | null = null;
-	let generatedImage: string | null = null;
-	let generatedError: string | null = null;
-	let generating = false;
 	let pixelSize = 50;
 
-	onMount(() => {
-		window.addEventListener('keydown', handleKeyDown);
-		return () => {
-			window.removeEventListener('keydown', handleKeyDown);
-		};
-	});
-
-	const handleKeyDown = (event: KeyboardEvent) => {
-		if (generatedImage && event.key === 'x') {
-			save();
-		}
-		if (event.key === 'o') {
-			restart();
-		}
-	};
+	let generatedImage: string | null = null;
+	let generatedError: string | null = null;
+	let focusGenerated = true;
 
 	function restart() {
 		uploadedImage = null;
+
 		pixelatedImage = null;
+		pixelSize = 50;
+
 		generatedImage = null;
 		generatedError = null;
+		focusGenerated = true;
 	}
 
 	function save() {
@@ -43,70 +31,71 @@
 
 	function imageUploaded(event: CustomEvent<any>) {
 		uploadedImage = event.detail.imageData;
-		generatedError = null;
+		generatedError = null; // empty out potential old error
+
+		runModel();
 	}
 
-	function generateStarted() {
-		generating = true;
-
+	const runModel = async () => {
 		for (let i = 0; i < 10; i++) {
 			setTimeout(() => (pixelSize = 50 - i * 3), i * 3000);
 		}
-	}
 
-	function generateEnded(event: CustomEvent<any>) {
-		generating = false;
-		pixelSize = 50;
+		const response = await fetch(`/api/generate`, {
+			method: 'POST',
+			body: JSON.stringify({ imageData: uploadedImage })
+		});
 
-		if (event.detail.error) {
+		const json = await response.json();
+
+		if (json.error) {
 			restart();
-			generatedError = event.detail.error;
+			generatedError = json.error;
+		} else {
+			generatedImage = json.generatedImgUri;
 		}
 
-		generatedImage = event.detail.imageData;
-	}
+		// setTimeout(
+		// 	() =>
+		// 		(generatedImage =
+		// 			'https://replicate.delivery/pbxt/NVfckGeGopq1lE5u9tMxK2Fv4yl5NIh1TtZ1z7n3QOffLwQKB/ComfyUI_00001_.png?fbclid=IwAR3eK1fTkWKVGaV59jLez_9404FJ1k2tMSM1TbDiV_TtvvhYrcNMiVyHO7I_aem_AahKJOJBbfpiP82zknsxxsJNN7rMVGNFOt1y6Lsbyoq4DFRbj8m34q3sJCDFmd8G_10loVSSFrbZbFqcztMNd1tJ'),
+		// 	10000
+		// );
+	};
 </script>
 
-<!-- <h1 class="flex justify-center items-center text-6xl gap-2 mt-10 mb-5">PS2 Nostalgia</h1> -->
-
-<div class="h-[30px]">
-	{#if !uploadedImage}
-		<ImageUploader on:upload={imageUploaded} />
-	{:else}
-		<div class="flex gap-5">
-			{#if generatedImage}
-				<Button label={'SAVE'} on:click={save} />
-				<Button label={'RESTART'} type="o" on:click={restart} />
-			{:else if !generating}
-				<ReplicateRunner
-					{uploadedImage}
-					on:generateStarted={generateStarted}
-					on:generateEnded={generateEnded}
-				/>
-				<Button label={'RESTART'} type="o" on:click={restart} />
-			{/if}
-		</div>
-	{/if}
-</div>
-
-<div class="max-w-[600px] h-[600px] flex justify-center items-center">
-	{#if !uploadedImage}
-		<img src={'example_crop.png'} alt="example" class="max-h-[600px]" />
-	{:else if generatedImage}
+{#if !uploadedImage}
+	<ImageUploader on:upload={imageUploaded} />
+	<img src={'example_crop.png'} alt="example" class="max-h-[600px]" />
+{:else if generatedImage}
+	<div class="h-[30px]">
+		<Button label={'SAVE'} type="x" on:click={save} />
+		<Button label={'RESTART'} type="o" on:click={restart} />
+	</div>
+	{#if focusGenerated}
 		<img src={generatedImage} alt="generated" class="max-h-[600px]" />
-	{:else if generating}
-		<Generating>
-			<PixelatedPreview image={uploadedImage} {pixelSize} />
-		</Generating>
 	{:else}
+		<img src={uploadedImage} alt="original" class="max-h-[600px]" />
+	{/if}
+	<div class="h-[30px] flex gap-5">
+		<Button
+			label={focusGenerated ? 'VIEW ORIGINAL' : 'VIEW PS2'}
+			on:click={() => (focusGenerated = !focusGenerated)}
+		/>
+	</div>
+{:else}
+	<!-- empty divs below make for the lack of buttons while generating -->
+	<div class="h-[30px]" />
+	<Generating>
 		<PixelatedPreview image={uploadedImage} {pixelSize} />
-	{/if}
+	</Generating>
+	<div class="h-[30px]" />
+{/if}
 
-	{#if generatedError}
-		<div class="flex justify-center">
-			<div class="text-red-500 text-lg font-bold absolute">
-				{generatedError}
-			</div>
+{#if generatedError}
+	<div class="flex justify-center">
+		<div class="text-red-500 text-lg font-bold absolute">
+			{generatedError}
 		</div>
-	{/if}
-</div>
+	</div>
+{/if}

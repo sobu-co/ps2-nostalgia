@@ -2,16 +2,14 @@
 	let loadingText: string | null = 'REACHING OUT TO ROCKSTAR GAMES...';
 </script>
 
-<div class="max-w-[600px] h-[600px]">
-	<div class="relative">
-		<slot />
-		<div class="x absolute inset-0 flex items-center justify-center">
-			<img class="y w-[100px]" src="ps_logo_3d.png" alt="bouncy ps logo" />
-		</div>
-		<div class="absolute inset-0 flex items-end justify-center">
-			<div class="bg-white animate-pulse px-4 py-2 text-md font-bold">
-				{loadingText}
-			</div>
+<div class="relative">
+	<slot />
+	<div class="x absolute inset-0 flex items-center justify-center">
+		<img class="y w-[100px]" src="ps_logo_3d.png" alt="bouncy ps logo" />
+	</div>
+	<div class="absolute inset-0 flex items-end justify-center">
+		<div class="text-center bg-white animate-pulse px-4 py-2 font-bold">
+			{loadingText}
 		</div>
 	</div>
 </div>
