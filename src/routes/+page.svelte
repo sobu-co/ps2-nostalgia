@@ -67,7 +67,7 @@
 	}
 </script>
 
-<h1 class="flex justify-center items-center text-6xl gap-2 mt-10 mb-5">PS2 Nostalgia</h1>
+<!-- <h1 class="flex justify-center items-center text-6xl gap-2 mt-10 mb-5">PS2 Nostalgia</h1> -->
 
 <div class="h-[30px]">
 	{#if !uploadedImage}
@@ -89,9 +89,9 @@
 	{/if}
 </div>
 
-<div class="max-w-[600px] h-[600px]">
+<div class="max-w-[600px] h-[600px] flex justify-center items-center">
 	{#if !uploadedImage}
-		<img src={'example.png'} alt="example" />
+		<img src={'example_crop.png'} alt="example" class="max-h-[600px]" />
 	{:else if generatedImage}
 		<img src={generatedImage} alt="generated" class="max-h-[600px]" />
 	{:else if generating}

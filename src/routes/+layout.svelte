@@ -4,11 +4,25 @@
 
 <div class="flex justify-center min-h-screen pulsing-background">
 	<div class="flex w-screen max-w-[700px] flex-col gap-5 py-5 px-2 justify-center items-center">
+		<video autoplay muted loop>
+			<source src="ps2_startup_2.mp4" type="video/mp4" />
+		</video>
 		<slot />
 	</div>
 </div>
 
 <style lang="postcss">
+	video {
+		position: absolute;
+		top: 0;
+		left: 0;
+		min-width: 100%;
+		min-height: 100%;
+		z-index: -100;
+		object-fit: cover;
+		opacity: 80%;
+	}
+
 	.pulsing-background {
 		position: fixed;
 		top: 0;
@@ -19,7 +33,7 @@
 		background: radial-gradient(
 			circle,
 			#ffffff,
-			#4d72ec
+			#000000
 		); /* White in the middle, dark blue around the edges */
 		animation: pulse 10s ease-in-out infinite alternate;
 		background-position: center center; /* Center the background */
