@@ -65,7 +65,12 @@
 </script>
 
 {#if !uploadedImage}
-	<ImageUploader on:upload={imageUploaded} />
+	<div class="text-center text-lg font-bold p-2 rounded-md bg-black text-white opacity-80">
+		UNDER MAINTENANCE, WE'LL BE WITH YOU IN A BIT
+		<br />
+		THX 4 THE PATIENCE
+	</div>
+	<!-- <ImageUploader on:upload={imageUploaded} /> -->
 	<img src={'example_crop.png'} alt="example" class="max-h-[600px]" />
 {:else if generatedImage}
 	<div class="h-[30px] flex gap-5">
