@@ -5,6 +5,8 @@
 	import Generating from '$lib/components/Generating.svelte';
 	import { saveImage } from '$lib/utils/imageUtils';
 
+	export let data;
+
 	let uploadedImage: string | null = null;
 
 	let pixelatedImage: string | null = null;
@@ -13,6 +15,9 @@
 	let generatedImage: string | null = null;
 	let generatedError: string | null = null;
 	let focusGenerated = true;
+
+	let accessToken = data.accessCode;
+	let generatingStatus: 'PRELOAD' | 'SUCCESS' | 'FAILED' | 'LOADING' = 'PRELOAD';
 
 	function restart() {
 		uploadedImage = null;
@@ -23,6 +28,8 @@
 		generatedImage = null;
 		generatedError = null;
 		focusGenerated = true;
+
+		generatingStatus = 'PRELOAD';
 	}
 
 	function save() {
@@ -40,19 +47,23 @@
 		for (let i = 0; i < 10; i++) {
 			setTimeout(() => (pixelSize = 50 - i * 3), i * 3000);
 		}
+		// add a tiny delay to prevent flicker if access code is incorrect
+		const loadingTimeout = setTimeout(() => (generatingStatus = 'LOADING'), 500);
 
 		const response = await fetch(`/api/generate`, {
 			method: 'POST',
-			body: JSON.stringify({ imageData: uploadedImage })
+			body: JSON.stringify({ imageData: uploadedImage, accessToken })
 		});
 
 		const json = await response.json();
+		clearTimeout(loadingTimeout);
 
 		if (json.error) {
 			restart();
 			generatedError = json.error;
 		} else {
 			generatedImage = json.generatedImgUri;
+			generatingStatus = 'SUCCESS';
 		}
 
 		// setTimeout(
@@ -64,15 +75,30 @@
 	};
 </script>
 
-{#if !uploadedImage}
+{#if !accessToken || generatedError}
 	<div class="text-center text-lg font-bold p-2 rounded-md bg-black text-white opacity-80">
+		<label for="accessToken">Access code</label>
+		<input name="accessToken" id="accessToken" class="text-black" bind:value={accessToken} />
+	</div>
+{/if}
+
+{#if generatedError}
+	<div class="flex justify-center mb-5">
+		<div class="text-red-500 text-lg font-bold absolute">
+			{generatedError}
+		</div>
+	</div>
+{/if}
+
+{#if generatingStatus === 'PRELOAD' || generatingStatus === 'FAILED'}
+	<!-- <div class="text-center text-lg font-bold p-2 rounded-md bg-black text-white opacity-80">
 		UNDER MAINTENANCE, WE'LL BE WITH YOU IN A BIT
 		<br />
 		THX 4 THE PATIENCE
-	</div>
-	<!-- <ImageUploader on:upload={imageUploaded} /> -->
+	</div> -->
+	<ImageUploader on:upload={imageUploaded} />
 	<img src={'example_crop.png'} alt="example" class="max-h-[600px]" />
-{:else if generatedImage}
+{:else if generatingStatus === 'SUCCESS'}
 	<div class="h-[30px] flex gap-5">
 		<Button label={'SAVE'} type="x" on:click={save} />
 		<Button label={'RESTART'} type="o" on:click={restart} />
@@ -88,19 +114,11 @@
 			on:click={() => (focusGenerated = !focusGenerated)}
 		/>
 	</div>
-{:else}
+{:else if generatingStatus === 'LOADING' && uploadedImage}
 	<!-- empty divs below make for the lack of buttons while generating -->
 	<div class="h-[30px]" />
 	<Generating>
 		<PixelatedPreview image={uploadedImage} {pixelSize} />
 	</Generating>
 	<div class="h-[30px]" />
-{/if}
-
-{#if generatedError}
-	<div class="flex justify-center">
-		<div class="text-red-500 text-lg font-bold absolute">
-			{generatedError}
-		</div>
-	</div>
 {/if}

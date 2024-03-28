@@ -1,31 +1,47 @@
-import { REPLICATE_API_KEY } from "$env/static/private";
+import { REPLICATE_API_KEY, VENMO_ACCOUNT } from '$env/static/private';
+import accessCodes from '$lib/access_codes.json';
 import { json } from '@sveltejs/kit';
-import Replicate from "replicate";
+import Replicate from 'replicate';
 
-export const POST = async ({ request }) => {
-
+export const POST = async ({ request, cookies }) => {
 	const body = await request.json();
 	const imageData: string = body.imageData;
+	const accessToken: string = body.accessToken;
+	const normalizedCodes = accessCodes.map((code) => code.toLowerCase());
+
+	if (!accessToken || !normalizedCodes.includes(accessToken.toLowerCase())) {
+		return json({
+			error: `oh noooo!! you need to pay us a dollar or enter a valid access code\nvenmo us: ${VENMO_ACCOUNT}`
+		});
+	}
+	cookies.set('accessToken', accessToken, {
+		secure: true,
+		httpOnly: true,
+		path: '/'
+	});
 
 	const replicate = new Replicate({ auth: REPLICATE_API_KEY });
-
-	const output = await replicate.run(
-		'fofr/face-to-many:35cea9c3164d9fb7fbd48b51503eabdb39c9d04fdaef9a68f368bed8087ec5f9',
-		{
-			input: {
-				image: imageData,
-				style: 'Video game',
-				prompt: 'ps1, ps2, gamecube, pixelated, sims gta style',
-				denoising_strength: 0.45
+	try {
+		const output = (await replicate.run(
+			'fofr/face-to-many:35cea9c3164d9fb7fbd48b51503eabdb39c9d04fdaef9a68f368bed8087ec5f9',
+			{
+				input: {
+					image: imageData,
+					style: 'Video game',
+					prompt: 'ps1, ps2, gamecube, pixelated, sims gta style',
+					denoising_strength: 0.45
+				}
 			}
+		)) as string[];
+
+		if (output && output[0]) {
+			const generatedImgUri = output[0];
+
+			return json({ generatedImgUri });
 		}
-	) as string[];
-
-	if (output && output[0]) {
-		const generatedImgUri = output[0];
-
-		return json({ generatedImgUri });
+	} catch (e) {
+		return json({ error: "woopsie daisie!! UNDER MAINTENANCE, WE'LL BE WITH YOU IN A BIT" });
 	}
 
-	return json({ error: "woopsie daisie!! try a different image" });
-}
+	return json({ error: 'woopsie daisie!! try a different image' });
+};
