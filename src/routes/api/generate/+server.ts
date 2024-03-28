@@ -3,7 +3,7 @@ import accessCodes from '$lib/access_codes.json';
 import { json } from '@sveltejs/kit';
 import Replicate from 'replicate';
 
-export const POST = async ({ request, cookies }) => {
+export const POST = async ({ request }) => {
 	const body = await request.json();
 	const imageData: string = body.imageData;
 	const accessToken: string = body.accessToken;
@@ -11,14 +11,9 @@ export const POST = async ({ request, cookies }) => {
 
 	if (!accessToken || !normalizedCodes.includes(accessToken.toLowerCase())) {
 		return json({
-			error: `oh noooo!! you need to pay us a dollar or enter a valid access code\nvenmo us: ${VENMO_ACCOUNT}`
+			error: `oh nooo!! your access token is invalid`
 		});
 	}
-	cookies.set('accessToken', accessToken, {
-		secure: true,
-		httpOnly: true,
-		path: '/'
-	});
 
 	const replicate = new Replicate({ auth: REPLICATE_API_KEY });
 	try {
@@ -40,7 +35,7 @@ export const POST = async ({ request, cookies }) => {
 			return json({ generatedImgUri });
 		}
 	} catch (e) {
-		return json({ error: "woopsie daisie!! UNDER MAINTENANCE, WE'LL BE WITH YOU IN A BIT" });
+		return json({ error: "UNDER MAINTENANCE, WE'LL BE WITH YOU IN A BIT" });
 	}
 
 	return json({ error: 'woopsie daisie!! try a different image' });

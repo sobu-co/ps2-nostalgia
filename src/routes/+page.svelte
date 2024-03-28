@@ -9,20 +9,18 @@
 
 	let uploadedImage: string | null = null;
 
-	let pixelatedImage: string | null = null;
-	let pixelSize = 50;
+	let pixelSize = 50; // pixelation while generatingStatus is LOADING
 
 	let generatedImage: string | null = null;
 	let generatedError: string | null = null;
 	let focusGenerated = true;
 
-	let accessToken = data.accessCode;
+	let accessToken = data.accessToken;
 	let generatingStatus: 'PRELOAD' | 'SUCCESS' | 'FAILED' | 'LOADING' = 'PRELOAD';
 
 	function restart() {
 		uploadedImage = null;
 
-		pixelatedImage = null;
 		pixelSize = 50;
 
 		generatedImage = null;
@@ -75,21 +73,6 @@
 	};
 </script>
 
-{#if !accessToken || generatedError}
-	<div class="text-center text-lg font-bold p-2 rounded-md bg-black text-white opacity-80">
-		<label for="accessToken">Access code</label>
-		<input name="accessToken" id="accessToken" class="text-black" bind:value={accessToken} />
-	</div>
-{/if}
-
-{#if generatedError}
-	<div class="flex justify-center mb-5">
-		<div class="text-red-500 text-lg font-bold absolute">
-			{generatedError}
-		</div>
-	</div>
-{/if}
-
 {#if generatingStatus === 'PRELOAD' || generatingStatus === 'FAILED'}
 	<!-- <div class="text-center text-lg font-bold p-2 rounded-md bg-black text-white opacity-80">
 		UNDER MAINTENANCE, WE'LL BE WITH YOU IN A BIT
@@ -121,4 +104,10 @@
 		<PixelatedPreview image={uploadedImage} {pixelSize} />
 	</Generating>
 	<div class="h-[30px]" />
+{/if}
+
+{#if generatedError}
+	<div class="text-sm text-center font-bold p-2 rounded-md bg-black text-red-500 opacity-80">
+		{generatedError}
+	</div>
 {/if}

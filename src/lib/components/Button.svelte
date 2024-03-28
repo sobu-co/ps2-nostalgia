@@ -32,7 +32,12 @@
 	{/if}
 
 	<div class="text-lg font-bold">
-		{label}
+		<!-- A bit hacky ... oh well lol -->
+		{#if label === 'SUBMIT'}
+			&rarr;
+		{:else}
+			{label}
+		{/if}
 	</div>
 </button>
 
