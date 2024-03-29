@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ cookies }) => {
-	return {
-		accessToken: cookies.get('accessToken')
-	};
+	const accessCode = cookies.get('accessToken');
+
+	return { accessCode };
 }) satisfies PageServerLoad;

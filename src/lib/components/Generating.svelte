@@ -8,7 +8,7 @@
 		<img class="y w-[100px]" src="ps_logo_3d.png" alt="bouncy ps logo" />
 	</div>
 	<div class="absolute inset-0 flex items-end justify-center">
-		<div class="text-center bg-white animate-pulse px-4 py-2 font-bold">
+		<div class="rounded-t-md bg-white animate-pulse px-4 py-2 font-black">
 			{loadingText}
 		</div>
 	</div>

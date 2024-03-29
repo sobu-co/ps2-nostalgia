@@ -1,12 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
 import accessCodes from '$lib/access_codes.json';
-import { fail, json, redirect } from '@sveltejs/kit';
-
-export const load = (async ({ cookies }) => {
-    const accessCode = cookies.get('accessToken');
-
-    return { accessCode };
-}) satisfies PageServerLoad;
+import { fail, redirect } from '@sveltejs/kit';
 
 export const actions: Actions = {
     default: async ({ request, cookies }) => {
@@ -28,6 +22,6 @@ export const actions: Actions = {
             redirect(303, "/");
         }
 
-        return fail(500, { error: 'woopsie daisie!! seems like that access code is invalid' })
+        return fail(500, { error: 'UH OH! SEEMS LIKE THAT ACCESS CODE IS INVALID' })
     },
 }

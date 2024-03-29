@@ -31,7 +31,7 @@
 		<img src="o.png" alt="playstation o button" />
 	{/if}
 
-	<div class="text-lg font-bold">
+	<div class="font-black">
 		<!-- A bit hacky ... oh well lol -->
 		{#if label === 'SUBMIT'}
 			&rarr;
@@ -43,7 +43,7 @@
 
 <style lang="postcss">
 	button {
-		background-color: rgba(231, 247, 231, 0.8);
+		background-color: rgba(255, 255, 255, 1);
 		box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 	}
 
@@ -53,10 +53,11 @@
 	}
 
 	button:hover {
-		text-shadow: 0 0 2px rgba(0, 255, 0, 0.8); /* Green glow with 8px blur radius */
+		text-shadow: 0 0 5px rgb(0, 255, 0); /* Green glow */
+		background-color: rgba(231, 247, 231, 1);
 	}
 
 	button:hover img {
-		box-shadow: 0 0 2px rgba(0, 255, 0, 0.8);
+		box-shadow: 0 0 5px rgba(0, 255, 0);
 	}
 </style>

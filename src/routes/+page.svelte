@@ -4,6 +4,10 @@
 	import Button from '$lib/components/Button.svelte';
 	import Generating from '$lib/components/Generating.svelte';
 	import { saveImage } from '$lib/utils/imageUtils';
+	import ImageComparerView from '$lib/components/ImageComparerView.svelte';
+	import InfoText from '$lib/components/InfoText.svelte';
+	import ErrorText from '$lib/components/ErrorText.svelte';
+	import ExampleImages from '$lib/components/ExampleImages.svelte';
 
 	export let data;
 
@@ -13,9 +17,8 @@
 
 	let generatedImage: string | null = null;
 	let generatedError: string | null = null;
-	let focusGenerated = true;
 
-	let accessToken = data.accessToken;
+	let accessToken = data.accessCode;
 	let generatingStatus: 'PRELOAD' | 'SUCCESS' | 'FAILED' | 'LOADING' = 'PRELOAD';
 
 	function restart() {
@@ -25,7 +28,6 @@
 
 		generatedImage = null;
 		generatedError = null;
-		focusGenerated = true;
 
 		generatingStatus = 'PRELOAD';
 	}
@@ -63,42 +65,28 @@
 			generatedImage = json.generatedImgUri;
 			generatingStatus = 'SUCCESS';
 		}
-
-		// setTimeout(
-		// 	() =>
-		// 		(generatedImage =
-		// 			'https://replicate.delivery/pbxt/NVfckGeGopq1lE5u9tMxK2Fv4yl5NIh1TtZ1z7n3QOffLwQKB/ComfyUI_00001_.png?fbclid=IwAR3eK1fTkWKVGaV59jLez_9404FJ1k2tMSM1TbDiV_TtvvhYrcNMiVyHO7I_aem_AahKJOJBbfpiP82zknsxxsJNN7rMVGNFOt1y6Lsbyoq4DFRbj8m34q3sJCDFmd8G_10loVSSFrbZbFqcztMNd1tJ'),
-		// 	10000
-		// );
 	};
 </script>
 
 {#if generatingStatus === 'PRELOAD' || generatingStatus === 'FAILED'}
-	<!-- <div class="text-center text-lg font-bold p-2 rounded-md bg-black text-white opacity-80">
-		UNDER MAINTENANCE, WE'LL BE WITH YOU IN A BIT
-		<br />
-		THX 4 THE PATIENCE
-	</div> -->
+	<InfoText
+		label={'TURN PHOTOS INTO PS2 GRAPHICS'}
+		sublabels={['TAP THE EXAMPLE BELOW TO WITNESS']}
+	/>
+	<ExampleImages />
 	<ImageUploader on:upload={imageUploaded} />
-	<img src={'example_crop.png'} alt="example" class="max-h-[600px]" />
 {:else if generatingStatus === 'SUCCESS'}
 	<div class="h-[30px] flex gap-5">
 		<Button label={'SAVE'} type="x" on:click={save} />
 		<Button label={'RESTART'} type="o" on:click={restart} />
 	</div>
-	{#if focusGenerated}
-		<img src={generatedImage} alt="generated" class="max-h-[600px]" />
-	{:else}
-		<img src={uploadedImage} alt="original" class="max-h-[600px]" />
-	{/if}
-	<div class="h-[30px]">
-		<Button
-			label={focusGenerated ? 'VIEW ORIGINAL' : 'VIEW PS2'}
-			on:click={() => (focusGenerated = !focusGenerated)}
-		/>
-	</div>
+	<ImageComparerView
+		imgSrc={generatedImage ?? ''}
+		altSrc={uploadedImage ?? ''}
+		alt={'result comparison'}
+	/>
 {:else if generatingStatus === 'LOADING' && uploadedImage}
-	<!-- empty divs below make for the lack of buttons while generating -->
+	<!-- empty divs below make up for the lack of buttons while generating -->
 	<div class="h-[30px]" />
 	<Generating>
 		<PixelatedPreview image={uploadedImage} {pixelSize} />
@@ -107,7 +95,5 @@
 {/if}
 
 {#if generatedError}
-	<div class="text-sm text-center font-bold p-2 rounded-md bg-black text-red-500 opacity-80">
-		{generatedError}
-	</div>
+	<ErrorText label={generatedError} />
 {/if}

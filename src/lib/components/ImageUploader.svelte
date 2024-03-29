@@ -32,7 +32,7 @@
 	};
 </script>
 
-<Button label={'CHOOSE AN IMAGE'} type="x" on:click={openFileInput} />
+<Button label={'SELECT PHOTO'} type="x" on:click={openFileInput} />
 
 <!-- TODO: eventually add ", video/*" to the accept prop below to allow capturing video -->
 <input type="file" id="capture" accept="image/*" on:change={captureMedia} hidden />
