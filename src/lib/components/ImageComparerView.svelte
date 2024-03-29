@@ -11,5 +11,5 @@
 </script>
 
 <button on:click={toggleImageSrc}>
-	<img {src} {alt} class="max-h-[600px] w-auto" />
+	<img {src} {alt} class="max-h-[500px] w-auto" />
 </button>
