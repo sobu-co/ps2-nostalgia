@@ -70,8 +70,8 @@
 
 {#if generatingStatus === 'PRELOAD' || generatingStatus === 'FAILED'}
 	<InfoText
-		label={'TURN PHOTOS INTO PS2 GRAPHICS'}
-		sublabels={['TAP THE EXAMPLE BELOW TO WITNESS']}
+		label={'TURN YOUR PHOTOS INTO PS2 GRAPHICS'}
+		sublabels={['TAP BELOW TO SEE IT IN ACTION']}
 	/>
 	<ExampleImages />
 	<ImageUploader on:upload={imageUploaded} />
