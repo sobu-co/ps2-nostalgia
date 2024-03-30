@@ -7,44 +7,50 @@
 	export let form: ActionData;
 </script>
 
-<InfoText label={'THANKS FOR USING PS2 NOSTALGIA'} />
+<div class="relative">
+	<div class="absolute inset-0 flex flex-col gap-8 items-center justify-center">
+		<InfoText label={'THANKS FOR USING <3'} />
+		<InfoText label={'SADLY, EVERY CONVERSION COSTS $$$'} />
+		<InfoText label={'IF YOU WANT TO MAKE MORE:'} />
+		<InfoText
+			label={'venmo @ps2cash a dollar'}
+			sublabels={[
+				"we'll comment a code like: 'LOVE' on the payment",
+				'enter that code below to get back to making images'
+			]}
+		/>
+		<InfoText
+			label={'notes:'}
+			sublabels={['please allow up to 8 hours for us to get back to you', 'we may be asleep']}
+		/>
 
-<InfoText
-	label={'TO GENERATE MORE IMAGES, PLEASE SUPPORT US'}
-	sublabels={[
-		'venmo 1$ to @ps2cash',
-		'',
-		'we will comment your code on the transaction. allow up to 8 hours for us to get back to you.',
-		'we may be asleep',
-		'',
-		'all codes are valid for 20 images'
-	]}
-/>
-
-<div class="flex flex-col items-center gap-2">
-	<form method="POST" enctype="multipart/form-data">
-		<div class="flex w-full items-center gap-2">
-			<input
-				type="text"
-				required
-				id="accessToken"
-				name="accessToken"
-				placeholder="ENTER CODE"
-				class="font-black px-2 py-1 rounded-md text-center"
-				maxlength="20"
-			/>
-			<Button label={'SUBMIT'} />
+		<div class="flex flex-col items-center gap-2">
+			<form method="POST" enctype="multipart/form-data">
+				<div class="flex w-full items-center gap-2">
+					<input
+						type="text"
+						required
+						id="accessToken"
+						name="accessToken"
+						placeholder="ENTER CODE"
+						class="font-black px-2 py-1 rounded-md text-center"
+						maxlength="20"
+					/>
+					<Button label={'SUBMIT'} />
+				</div>
+			</form>
+			{#if form?.error}
+				<ErrorText label={form?.error} />
+			{/if}
 		</div>
-	</form>
-	{#if form?.error}
-		<ErrorText label={form?.error} />
-	{/if}
-</div>
+	</div>
 
-<img src={'example_crop.png'} alt="example" class="max-h-[600px]" />
+	<img src={'example.png'} alt="example" class="w-screen h-screen object-cover" />
+</div>
 
 <style lang="postcss">
 	input {
+		background-color: rgba(231, 247, 231, 0.85);
 		box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 	}
 </style>

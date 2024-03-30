@@ -2,11 +2,11 @@
 	import '../app.css';
 </script>
 
-<div class="flex flex-grow justify-center min-h-full py-3">
+<div class="flex justify-center min-h-[calc(100vh-80px)] items-center justify-center">
 	<video autoplay muted loop>
 		<source src="ps2_startup.mp4" type="video/mp4" />
 	</video>
-	<div class="flex flex-col max-w-[700px] gap-3 items-center justify-center">
+	<div class="flex flex-col gap-3 items-center justify-center">
 		<slot />
 	</div>
 </div>
@@ -16,8 +16,8 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		min-width: 100%;
-		min-height: 100%;
+		width: 100%;
+		height: 100%;
 		z-index: -10;
 		object-fit: cover;
 		opacity: 80%;

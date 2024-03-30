@@ -17,7 +17,6 @@ export const POST = async ({ request, cookies }) => {
 	if (visitId && !validCode) {
 		return json({ error: "UH OH SOMETHING WENT TERRIBLY WRONG" });
 	}
-
 	const replicate = new Replicate({ auth: REPLICATE_API_KEY });
 	try {
 		const output = (await replicate.run(

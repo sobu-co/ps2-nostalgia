@@ -3,13 +3,15 @@
 	export let sublabels: string[] | null = null;
 </script>
 
-<div
-	class="flex flex-col gap-1 items-center text-center px-2 py-1 font-black rounded-md bg-black text-white opacity-80"
->
-	{label}
+<div class="flex flex-col gap-1 items-center text-center font-black">
+	<div class="px-2 py-1 rounded-md bg-zinc-900 text-white opacity-90">
+		{label}
+	</div>
 	{#if sublabels}
-		{#each sublabels as sublabel}
-			<div class="text-center text-xs max-w-[300px]">{sublabel}</div>
-		{/each}
+		<div class="px-2 py-1 rounded-md bg-zinc-900 text-white opacity-90">
+			{#each sublabels as sublabel}
+				<div class="text-center text-xs">{sublabel}</div>
+			{/each}
+		</div>
 	{/if}
 </div>

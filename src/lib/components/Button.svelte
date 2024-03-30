@@ -43,7 +43,7 @@
 
 <style lang="postcss">
 	button {
-		background-color: rgba(255, 255, 255, 1);
+		background-color: rgba(231, 247, 231, 0.85);
 		box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 	}
 
@@ -54,7 +54,6 @@
 
 	button:hover {
 		text-shadow: 0 0 5px rgb(0, 255, 0); /* Green glow */
-		background-color: rgba(231, 247, 231, 1);
 	}
 
 	button:hover img {
