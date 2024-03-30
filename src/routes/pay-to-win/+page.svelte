@@ -10,7 +10,7 @@
 <div class="relative">
 	<div class="absolute inset-0 flex flex-col gap-8 items-center justify-center">
 		<InfoText label={'THANKS FOR USING <3'} />
-		<InfoText label={'SADLY, EVERY CONVERSION COSTS $$$'} />
+		<InfoText label={'SADLY, EVERY CONVERSION COSTS US $$$'} />
 		<InfoText label={'IF YOU WANT TO MAKE MORE:'} />
 		<InfoText
 			label={'venmo @ps2cash a dollar'}
