@@ -4,33 +4,17 @@
 
 <div class="relative">
 	<slot />
-	<div class="x absolute inset-0 flex items-center justify-center">
-		<img class="y w-[100px]" src="ps_logo_3d.png" alt="bouncy ps logo" />
-	</div>
-	<div class="absolute inset-0 flex items-end justify-center">
-		<div class="rounded-t-md bg-white animate-pulse px-4 py-2 font-black">
+	<div class="absolute top-2 left-1/2 transform -translate-x-1/2">
+		<div class="rounded-sm bg-white px-2 font-bold">
 			{loadingText}
 		</div>
+	</div>
+	<div class="x absolute inset-0 flex items-center justify-center">
+		<img class="y w-[100px]" src="favicon.png" alt="bouncy ps logo" />
 	</div>
 </div>
 
 <style lang="postcss">
-	.animate-pulse {
-		animation: pulse 2s infinite;
-	}
-
-	@keyframes pulse {
-		0% {
-			opacity: 80%;
-		}
-		50% {
-			opacity: 100%;
-		}
-		100% {
-			opacity: 80%;
-		}
-	}
-
 	.x {
 		animation: x 3s linear infinite alternate;
 	}

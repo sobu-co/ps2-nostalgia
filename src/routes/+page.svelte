@@ -7,7 +7,6 @@
 	import ImageComparerView from '$lib/components/ImageComparerView.svelte';
 	import InfoText from '$lib/components/InfoText.svelte';
 	import ErrorText from '$lib/components/ErrorText.svelte';
-	import ExampleImages from '$lib/components/ExampleImages.svelte';
 
 	export let data;
 
@@ -69,16 +68,17 @@
 </script>
 
 {#if generatingStatus === 'PRELOAD' || generatingStatus === 'FAILED'}
-	<InfoText
-		label={'TURN YOUR PHOTOS INTO PS2 GRAPHICS'}
-		sublabels={['TAP BELOW TO SEE IT IN ACTION']}
+	<InfoText label="MAKE A PS2 VERSION OF YOUR GRANDPA" />
+	<ImageComparerView
+		imgSrc={'examples/gramps_ps2.png'}
+		altSrc={'examples/gramps_og.png'}
+		alt={'example image of my grandpa'}
 	/>
-	<ExampleImages />
+	<InfoText label="(OR ANYTHING ELSE)" />
 	<ImageUploader on:upload={imageUploaded} />
 {:else if generatingStatus === 'SUCCESS'}
-	<div class="h-[30px] flex gap-5">
-		<Button label={'SAVE'} type="x" on:click={save} />
-		<Button label={'RESTART'} type="o" on:click={restart} />
+	<div class="h-[25px]">
+		<Button label={'GO AGAIN'} type="o" on:click={restart} />
 	</div>
 	<ImageComparerView
 		imgSrc={generatedImage ?? ''}
@@ -86,12 +86,11 @@
 		alt={'result comparison'}
 	/>
 {:else if generatingStatus === 'LOADING' && uploadedImage}
-	<!-- empty divs below make up for the lack of buttons while generating -->
-	<div class="h-[30px]" />
+	<!-- empty div below make up for the lack of restart button while generating -->
+	<div class="h-[25px]" />
 	<Generating>
 		<PixelatedPreview image={uploadedImage} {pixelSize} />
 	</Generating>
-	<div class="h-[30px]" />
 {/if}
 
 {#if generatedError}

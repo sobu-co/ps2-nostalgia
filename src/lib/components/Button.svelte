@@ -24,14 +24,14 @@
 	}
 </script>
 
-<button class="rounded-3xl px-4 py-1 flex items-center justify-center gap-2" on:click={onClick}>
+<button class="rounded-sm px-2 flex items-center justify-center gap-2" on:click={onClick}>
 	{#if type === 'x'}
 		<img src="x.png" alt="playstation x button" />
 	{:else if type === 'o'}
 		<img src="o.png" alt="playstation o button" />
 	{/if}
 
-	<div class="font-black">
+	<div class="font-bold">
 		<!-- A bit hacky ... oh well lol -->
 		{#if label === 'SUBMIT'}
 			&rarr;
@@ -43,20 +43,26 @@
 
 <style lang="postcss">
 	button {
-		background-color: rgba(231, 247, 231, 0.85);
+		background-color: rgba(231, 247, 231, 0.8);
 		box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 	}
 
 	button img {
-		height: 20px;
+		height: 15px;
 		border-radius: 50px;
 	}
 
 	button:hover {
-		text-shadow: 0 0 5px rgb(0, 255, 0); /* Green glow */
+		text-shadow:
+			0 0 1px rgb(0, 255, 0),
+			0 0 3px rgb(0, 255, 0, 0.8),
+			0 0 5px rgb(0, 255, 0, 0.5); /* Green glow */
 	}
 
 	button:hover img {
-		box-shadow: 0 0 5px rgba(0, 255, 0);
+		box-shadow:
+			0 0 1px rgb(0, 255, 0),
+			0 0 3px rgb(0, 255, 0, 0.8),
+			0 0 5px rgb(0, 255, 0, 0.5);
 	}
 </style>
