@@ -3,12 +3,10 @@
 	import PixelatedPreview from '$lib/components/PixelatedPreview.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Generating from '$lib/components/Generating.svelte';
-	import { saveImage } from '$lib/utils/imageUtils';
 	import ImageComparerView from '$lib/components/ImageComparerView.svelte';
 	import InfoText from '$lib/components/InfoText.svelte';
 	import ErrorText from '$lib/components/ErrorText.svelte';
-
-	export let data;
+	import { invalidateAll } from '$app/navigation';
 
 	let uploadedImage: string | null = null;
 
@@ -17,10 +15,11 @@
 	let generatedImage: string | null = null;
 	let generatedError: string | null = null;
 
-	let accessToken = data.accessCode;
 	let generatingStatus: 'PRELOAD' | 'SUCCESS' | 'FAILED' | 'LOADING' = 'PRELOAD';
 
 	function restart() {
+		invalidateAll();
+
 		uploadedImage = null;
 
 		pixelSize = 50;
@@ -29,10 +28,6 @@
 		generatedError = null;
 
 		generatingStatus = 'PRELOAD';
-	}
-
-	function save() {
-		generatedImage && saveImage(generatedImage);
 	}
 
 	function imageUploaded(event: CustomEvent<any>) {
@@ -51,7 +46,7 @@
 
 		const response = await fetch(`/api/generate`, {
 			method: 'POST',
-			body: JSON.stringify({ imageData: uploadedImage, accessToken })
+			body: JSON.stringify({ imageData: uploadedImage })
 		});
 
 		const json = await response.json();
@@ -77,20 +72,20 @@
 	<InfoText label="(OR ANYTHING ELSE)" />
 	<ImageUploader on:upload={imageUploaded} />
 {:else if generatingStatus === 'SUCCESS'}
-	<div class="h-[25px]">
-		<Button label={'GO AGAIN'} type="o" on:click={restart} />
-	</div>
 	<ImageComparerView
 		imgSrc={generatedImage ?? ''}
 		altSrc={uploadedImage ?? ''}
 		alt={'result comparison'}
 	/>
+	<div class="h-[25px]">
+		<Button label={'GO AGAIN'} type="o" on:click={restart} />
+	</div>
 {:else if generatingStatus === 'LOADING' && uploadedImage}
-	<!-- empty div below make up for the lack of restart button while generating -->
-	<div class="h-[25px]" />
 	<Generating>
 		<PixelatedPreview image={uploadedImage} {pixelSize} />
 	</Generating>
+	<!-- empty div below make up for the lack of restart button while generating -->
+	<div class="h-[25px]" />
 {/if}
 
 {#if generatedError}

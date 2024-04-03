@@ -1,22 +1,18 @@
 import { REPLICATE_API_KEY, VENMO_ACCOUNT } from '$env/static/private';
 import accessCodes from '$lib/access_codes.json';
-import { json, redirect } from '@sveltejs/kit';
+import { accessAllowed, getNumGeneratedFromCookies } from '$lib/utils/cookieUtils.js';
+import { json } from '@sveltejs/kit';
 import Replicate from 'replicate';
 
 export const POST = async ({ request, cookies }) => {
 	const body = await request.json();
 	const imageData: string = body.imageData;
-	const accessToken: string = body.accessToken;
 
-	const visitId = cookies.get('ps_vid');
-	const normalizedCodes = accessCodes.map((code) => code.toLowerCase());
-	const validCode = accessToken && normalizedCodes.includes(accessToken.toLowerCase());
-
-	// if they've already visited, and don't have a valid accessToken
-	// this should not be reachable
-	if (visitId && !validCode) {
-		return json({ error: "UH OH SOMETHING WENT TERRIBLY WRONG" });
+	// if they don't have access, they shouldn't have gotten here
+	if (!accessAllowed(cookies)) {
+		return json({ error: "UH OH SOMETHING WENT TERRIBLY WRONG. PLEASE REFRESH AND TRY AGAIN." });
 	}
+
 	const replicate = new Replicate({ auth: REPLICATE_API_KEY });
 	try {
 		const output = (await replicate.run(
@@ -34,7 +30,9 @@ export const POST = async ({ request, cookies }) => {
 		if (output && output[0]) {
 			// if they successfuly made an image, save a visitId in cookies
 			// so that we can paywall next attempt
-			cookies.set('ps_vid', generateVisitId(), {
+			const numGenerated = getNumGeneratedFromCookies(cookies);
+
+			cookies.set('ps_vid', generateVisitId(numGenerated + 1), {
 				secure: true,
 				httpOnly: true,
 				path: '/'
@@ -50,12 +48,12 @@ export const POST = async ({ request, cookies }) => {
 	return json({ error: 'WOOPSIE DAISIE!! TRY A DIFFERENT IMAGE' });
 };
 
-function generateVisitId(): string {
+function generateVisitId(numGenerated: number): string {
 	let result = '';
 	const charset = 'abcdefghijklmnopqrstuvwxyz1234567890';
 	for (let i = 0; i < 10; i++) {
 		const randomIndex = Math.floor(Math.random() * charset.length);
 		result += charset.charAt(randomIndex);
 	}
-	return result;
+	return result + ":" + numGenerated;
 }
