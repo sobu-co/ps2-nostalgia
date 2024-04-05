@@ -10,7 +10,7 @@
 
 	let uploadedImage: string | null = null;
 
-	let pixelSize = 50; // pixelation while generatingStatus is LOADING
+	let pixelSize = 30; // pixelation while generatingStatus is LOADING
 
 	let generatedImage: string | null = null;
 	let generatedError: string | null = null;
@@ -22,7 +22,7 @@
 
 		uploadedImage = null;
 
-		pixelSize = 50;
+		pixelSize = 30;
 
 		generatedImage = null;
 		generatedError = null;
@@ -39,10 +39,10 @@
 
 	const runModel = async () => {
 		for (let i = 0; i < 10; i++) {
-			setTimeout(() => (pixelSize = 50 - i * 3), i * 3000);
+			setTimeout(() => (pixelSize = 30 - i * 2), i * 3000);
 		}
 		// add a tiny delay to prevent flicker if access code is incorrect
-		const loadingTimeout = setTimeout(() => (generatingStatus = 'LOADING'), 500);
+		generatingStatus = 'LOADING';
 
 		const response = await fetch(`/api/generate`, {
 			method: 'POST',
@@ -50,7 +50,6 @@
 		});
 
 		const json = await response.json();
-		clearTimeout(loadingTimeout);
 
 		if (json.error) {
 			restart();
@@ -84,8 +83,6 @@
 	<Generating>
 		<PixelatedPreview image={uploadedImage} {pixelSize} />
 	</Generating>
-	<!-- empty div below make up for the lack of restart button while generating -->
-	<div class="h-[25px]" />
 {/if}
 
 {#if generatedError}
