@@ -38,8 +38,11 @@
 	}
 
 	const runModel = async () => {
+		let upcomingPixelations = [];
+
 		for (let i = 0; i < 10; i++) {
-			setTimeout(() => (pixelSize = 30 - i * 2), i * 3000);
+			let upcoming = setTimeout(() => (pixelSize = 30 - i * 2), i * 3000);
+			upcomingPixelations.push(upcoming);
 		}
 		// add a tiny delay to prevent flicker if access code is incorrect
 		generatingStatus = 'LOADING';
@@ -50,6 +53,10 @@
 		});
 
 		const json = await response.json();
+
+		for (let upcoming of upcomingPixelations) {
+			clearTimeout(upcoming);
+		}
 
 		if (json.error) {
 			restart();
