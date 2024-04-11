@@ -2,7 +2,7 @@
 	import '../app.css';
 </script>
 
-<div class="flex justify-center min-h-[calc(100vh-80px)] items-center justify-center">
+<div class="flex items-center justify-center min-h-[calc(100vh-50px)]">
 	<video autoplay playsinline muted loop>
 		<source src="ps2_startup.mp4" type="video/mp4" />
 	</video>
@@ -16,8 +16,8 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 100%;
-		height: 100%;
+		width: 100vw;
+		height: 100vh;
 		z-index: -10;
 		object-fit: cover;
 		opacity: 80%;
