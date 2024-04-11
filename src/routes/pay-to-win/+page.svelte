@@ -13,7 +13,11 @@
 		<InfoText label={'SADLY, EVERY CONVERSION COSTS US $$$'} />
 		<InfoText label={'IF YOU WANT TO MAKE MORE:'} />
 		<div class="flex flex-col gap-1 items-center">
-			<InfoText label={'1. venmo @ps2cash a dollar'} smaller />
+			<a href="https://venmo.com/u/ps2cash" class="underline decoration-white">
+				<InfoText label={'1. venmo @ps2cash a dollar'} smaller />
+			</a>
+			<img src={'venmo_tag.jpg'} alt="venmo tag" class="w-[150px] rounded-lg" />
+
 			<InfoText label={"2. we'll comment a code like 'LOVE' on the payment"} smaller />
 			<InfoText label={'3. enter that code below to get back to ps2 fun'} smaller />
 		</div>
