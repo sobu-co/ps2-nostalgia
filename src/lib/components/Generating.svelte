@@ -44,10 +44,10 @@
 	</div>
 	{#if xRange > 0 || yRange > 0}
 		<div class="x absolute inset-0 flex items-center justify-center">
-			<img class="y w-[70px]" src="logo.png" alt="bouncy ps logo" />
+			<img class="y w-[70px]" src="favicon.ico" alt="bouncy ps logo" />
 		</div>
 	{:else}
-		<img class="absolute top-0 left-0 w-[70px] top-0 left-0" src="logo.png" alt="bouncy ps logo" />
+		<img class="absolute top-0 left-0 w-[70px] top-0 left-0" src="favicon.ico" alt="bouncy ps logo" />
 	{/if}
 </div>
 
@@ -67,6 +67,11 @@
 
 	.y {
 		animation: y 13s linear infinite alternate;
+	}
+
+	img {
+		image-rendering: pixelated;
+		image-rendering: -moz-crisp-edges;
 	}
 
 	@keyframes x {
